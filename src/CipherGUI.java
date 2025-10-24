@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class CipherGUI extends JFrame {
 
-    public static Stirng nameTest = "ddadhjaldlhka";
+    public static String nameTest = "ddadhjaldlhka";
 
     private JComboBox<String> languageCombo;
     private JTextField inputFileField, outputFileField, keyField;
