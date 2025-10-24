@@ -24,10 +24,20 @@ jobs:
 
       # Step 2: Compile the Java code before scanning
       # This command assumes your source is in 'src' and libraries are in 'libs'
-      - name: Build Project with javac
+      - name: Build and Verify
         run: |
+          echo "--- 1. Verifying files to be compiled ---"
+          find src -name "*.java"
+          echo "----------------------------------------"
+
+          echo "--- 2. Compiling the code ---"
           mkdir -p bin
           javac -d bin -sourcepath src -cp "libs/*" $(find src -name "*.java")
+          echo "-----------------------------"
+
+          echo "--- 3. Verifying the contents of the 'bin' directory ---"
+          ls -R bin
+          echo "--------------------------------------------------------"
 
       # Step 3: Run the SonarQube analysis ONLY AFTER the build is complete
       - name: SonarQube Scan
