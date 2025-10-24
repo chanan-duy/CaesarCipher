@@ -1,4 +1,4 @@
-name: Build
+name: Build and Analyze
 on:
   push:
     branches:
@@ -7,13 +7,31 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   sonarqube:
-    name: SonarQube
+    name: SonarQube Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      # Step 1: Set up the Java environment (JDK) needed to compile your code
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Step 2: Compile the Java code before scanning
+      # This command assumes your source is in 'src' and libraries are in 'libs'
+      - name: Build Project with javac
+        run: |
+          mkdir -p bin
+          javac -d bin -sourcepath src -cp "libs/*" $(find src -name "*.java")
+
+      # Step 3: Run the SonarQube analysis ONLY AFTER the build is complete
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v6
+        uses: SonarSource/sonarqube-scan-action@master # Using master is often more up-to-date
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # It's best practice to also have this as a secret
