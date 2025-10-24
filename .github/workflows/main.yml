@@ -34,4 +34,3 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@master # Using master is often more up-to-date
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # It's best practice to also have this as a secret
