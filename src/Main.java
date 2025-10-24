@@ -1,5 +1,5 @@
 import javax.swing.SwingUtilities;
-
+// запуск программы
 public class Main {
 
     public static void main(String[] args) {
